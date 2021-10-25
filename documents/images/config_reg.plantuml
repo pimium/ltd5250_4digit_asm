@@ -1,0 +1,12 @@
+@startuml
+concise "Web User" as WU
+
+scale 10 as 100 pixels
+
+@0
+WU is Idle
+@+100
+
+
+highlight 20 to 45 #Gold;line:DimGrey : This is my caption
+@enduml

@@ -17,8 +17,8 @@ PANDOCFLAGS =                        \
 
 all: phony documents/readme.pdf
 
-documents/%.pdf: %.md $(FIGURES) pandoc.make | documents
-	pandoc $< -o $@ $(PANDOCFLAGS)
+documents/%.pdf: %.md $(FIGURES) documents/header.yaml pandoc.make | documents
+	pandoc documents/header.yaml $< -o $@ $(PANDOCFLAGS)
 
 documents/%.epub: %.md $(FIGURES) pandoc.make | documents
 	pandoc $< -o $@ $(PANDOCFLAGS)
