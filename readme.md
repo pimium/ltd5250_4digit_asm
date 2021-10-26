@@ -24,11 +24,23 @@ The schematic[^schematic] and the gerber[^gerber] files
 [^gerber]: documents/gerber.zip
 [^schematic]: documents/images/ltd5250_pic16f54_sch.pdf
 
-![Schematic MCU\label{schematic_mcu}](documents/images/schematic_mcu.png){ width=60% }
+<figcaption>
 
-![Schematic Seven-Segments\label{schematic_seven_segment}](documents/images/schematic_seven_segment.png){ width=80% }
+![Schematic MCU](documents/images/schematic_mcu.png){ #fig:schematic_mcu }
 
-![Schematic Programmer and Header\label{schematic_seven_prog}](documents/images/shift_register.png){ width=100% }
+</figcaption>
+
+<figcaption>
+
+![Schematic Seven-Segments](documents/images/schematic_seven_segment.png){#fig:schematic_seven_segment }
+
+</figcaption>
+
+<figcaption>
+
+![Schematic Programmer and Header](documents/images/shift_register.png){#fig:shift_register}
+
+</figcaption>
 
 # SPI Protocol
 
@@ -54,10 +66,14 @@ Table: Intern Register Structure
 
 Table: Config Register 
 
-| Bit | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-|:---|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|0x00 | - | - | - |  <t style="text-decoration:overline">EN</t> | DIM3  | DIM2  | DIM1  | DIM0  |
-| Initial value | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+-----------------------------------------------------------------------------
+__Bit__              7      6      5      4      3       2       1       0 
+--------           -----  -----  -----  -----  ------  ------  ------  ------ 
+__0x00__        	 -      -      -     EN     DIM3    DIM2    DIM1    DIM0  
+
+__Initial value__    0      0      0     0       1       0       0       0 
+
+-----------------------------------------------------------------------------
 
 </center>
 
@@ -76,12 +92,24 @@ Each bit in this registers represents a segment.
 
 Table: Digit Register 
 
-| Bit | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-|:---|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|0x00 | dp | G | F | E | D  | C  | B  | A  |
-| Initial value | - | - | - | - | - | - | - | - |
+-------------------------------------------------------------
+__Bit__              7     6     5     4     3     2     1     0  
+----               ----- ----- ----- ----- ----- ----- ----- -----
+__0x01-0x04__       dp     G     F     E     D     C     B     A  
+
+__Initial value__   -      -     -     -     -     -     -     - 
+
+-------------------------------------------------------------
+
 
 </center>
+
+
+<figcaption>
+
+![Seven Segments](documents/images/seven_segments.png){#fig:seven_segments}
+
+</figcaption>
 
 Table: Digit Register 
 
@@ -93,12 +121,6 @@ Table: Digit Register
 | 4   | Digit 4 Register | 0x0F |
 
 </center>
-
-<figcaption>
-
-![Seven Segments](documents/images/seven_segments.png){#fig:seven_segments width=30%}
-
-</figcaption>
 
 ## SPI Datagramme
 
