@@ -26,19 +26,19 @@ The schematic[^schematic] and the gerber[^gerber] files
 
 <figcaption>
 
-![Schematic MCU](documents/images/schematic_mcu.png){ #fig:schematic_mcu }
+![Schematic MCU\label{fig:schematic_mcu}](documents/images/schematic_mcu.png)
 
 </figcaption>
 
 <figcaption>
 
-![Schematic Seven-Segments](documents/images/schematic_seven_segment.png){#fig:schematic_seven_segment }
+![Schematic Seven-Segments\label{fig:schematic_seven_segment}](documents/images/schematic_seven_segment.png)
 
 </figcaption>
 
 <figcaption>
 
-![Schematic Programmer and Header](documents/images/shift_register.png){#fig:shift_register}
+![Schematic Programmer and Header\label{fig:shift_register}](documents/images/shift_register.png)
 
 </figcaption>
 
@@ -66,22 +66,20 @@ Table: Intern Register Structure
 
 Table: Config Register 
 
------------------------------------------------------------------------------
-__Bit__              7      6      5      4      3       2       1       0 
---------           -----  -----  -----  -----  ------  ------  ------  ------ 
-__0x00__        	 -      -      -     EN     DIM3    DIM2    DIM1    DIM0  
 
-__Initial value__    0      0      0     0       1       0       0       0 
+|__Bit__            |   7   |   6   |   5   |   4   |   3    |   2    |   1    |   0   |
+|:--------          |:-----:|:-----:|:-----:|:-----:|:------:|:------:|:------:|:-----:| 
+|__0x00__           |   -   |   -   |   -   |  EN   |  DIM3  |  DIM2  |  DIM1  |  DIM0 | 
+|__Initial value__  | &nbsp; &nbsp; 0 &nbsp; &nbsp; | &nbsp; &nbsp; 0 &nbsp; &nbsp; | &nbsp; &nbsp; 0 &nbsp; &nbsp;  |   0   |   1    |   0    |   0    |   0   |
 
------------------------------------------------------------------------------
 
 </center>
 
 
-DIM[0-3]:
+DIM[3-0]
 :  Dimming (0x0 = Maximal and 0xF = Minimal)
 
-EN:
+EN
 : Enable / Disable (1 = Disable 0 = Enable)
 
 ### Register 1-4 - Digit Register
@@ -92,22 +90,17 @@ Each bit in this registers represents a segment.
 
 Table: Digit Register 
 
--------------------------------------------------------------
-__Bit__              7     6     5     4     3     2     1     0  
-----               ----- ----- ----- ----- ----- ----- ----- -----
-__0x01-0x04__       dp     G     F     E     D     C     B     A  
-
-__Initial value__   -      -     -     -     -     -     -     - 
-
--------------------------------------------------------------
-
+|__Bit__            |  7   |  6   |  5   |  4   |  3   |  2   |  1   |  0  |
+|:---               |:---: |:---: |:---: |:---: |:---: |:---: |:---: |:---:|
+|__0x01-0x04__      | dp   |  G   |  F   |  E   |  D   |  C   |  B   |  A  |
+|__Initial value__  | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; &nbsp; |
 
 </center>
 
 
 <figcaption>
 
-![Seven Segments](documents/images/seven_segments.png){#fig:seven_segments}
+![Seven Segments\label{fig:seven_segments}](documents/images/seven_segments.png)
 
 </figcaption>
 
@@ -126,7 +119,7 @@ Table: Digit Register
 
 <figcaption>
 
-![SPI Datagramme](documents/images/spi.png){#fig:datagramme} 
+![SPI Datagramme\label{fig:datagramme}](documents/images/spi.png) 
 
 </figcaption>
 
@@ -145,8 +138,3 @@ Table: Bit Timing
 | TPA | Wait between packet | 144| 1500 | 7500 | us |
 
 </center>
-
-
-
-
-
