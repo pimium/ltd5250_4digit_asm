@@ -52,29 +52,26 @@ Table: Intern Register Structure
 
 | Adresse | Description |
 |:---:|:---|
-| 0   | Config Register  |
-| 1   | Digit 1 Register |
-| 2   | Digit 2 Register |
-| 3   | Digit 3 Register |
-| 4   | Digit 4 Register |
+| 0x00   | Config Register  |
+| 0x01   | Digit 1 Register |
+| 0x02   | Digit 2 Register |
+| 0x03   | Digit 3 Register |
+| 0x04   | Digit 4 Register |
 
 </center>
 
-### Register 0 - Config Register
+### Register 0x00 - Config Register
 
 <center>
 
 Table: Config Register 
 
-
-|__Bit__            |   7   |   6   |   5   |   4   |   3    |   2    |   1    |   0   |
-|:--------          |:-----:|:-----:|:-----:|:-----:|:------:|:------:|:------:|:-----:| 
-|__0x00__           |   -   |   -   |   -   |  EN   |  DIM3  |  DIM2  |  DIM1  |  DIM0 | 
+|__Bit__  |   7   |   6   |   5   |   4   |   3    |   2    |   1    |   0   |
+|:---      |:-----:|:-----:|:-----:|:-----:|:------:|:------:|:------:|:-----:| 
+|__0x00__  |   -   |   -   |   -   |  EN   |  DIM3  |  DIM2  |  DIM1  |  DIM0 | 
 |__Initial value__  | &nbsp; &nbsp; 0 &nbsp; &nbsp; | &nbsp; &nbsp; 0 &nbsp; &nbsp; | &nbsp; &nbsp; 0 &nbsp; &nbsp;  |   0   |   1    |   0    |   0    |   0   |
 
-
 </center>
-
 
 DIM[3-0]
 :  Dimming (0x0 = Maximal and 0xF = Minimal)
@@ -82,21 +79,20 @@ DIM[3-0]
 EN
 : Enable / Disable (1 = Disable 0 = Enable)
 
-### Register 1-4 - Digit Register
+### Register 0x01-0x04 - Digit Register
 
-Each bit in this registers represents a segment.
+Each bit in those registers represents a segment.
 
 <center>
 
 Table: Digit Register 
 
-|__Bit__            |  7   |  6   |  5   |  4   |  3   |  2   |  1   |  0  |
+| __Bit__           |  7   |  6   |  5   |  4   |  3   |  2   |  1   |  0  |
 |:---               |:---: |:---: |:---: |:---: |:---: |:---: |:---: |:---:|
 |__0x01-0x04__      | dp   |  G   |  F   |  E   |  D   |  C   |  B   |  A  |
 |__Initial value__  | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; | &nbsp; &nbsp; - &nbsp; &nbsp; |
 
 </center>
-
 
 <figcaption>
 

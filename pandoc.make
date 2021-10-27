@@ -15,9 +15,13 @@ PANDOCFLAGS =                        \
 #   --table-of-contents                \
 #   --pdf-engine=xelatex               
 
-all: phony documents/README.pdf
+all: phony documents/README.pdf documents/README.tex
 
 documents/%.pdf: %.md $(FIGURES) documents/header.yaml pandoc.make | documents
+	pandoc documents/header.yaml $< -o $@ $(PANDOCFLAGS)
+
+
+documents/%.tex: %.md $(FIGURES) documents/header.yaml pandoc.make | documents
 	pandoc documents/header.yaml $< -o $@ $(PANDOCFLAGS)
 
 documents/%.epub: %.md $(FIGURES) pandoc.make | documents
