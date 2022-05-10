@@ -1,4 +1,4 @@
-# ltd5250_4digit_asm
+# LTD5250_4digit_asm
  
 # Overview
 
@@ -6,9 +6,10 @@ The Driver control the display over One Wire bus. The driver can set up the lumi
 
 The "PIC16F54 7 segments display":
 
-- 3 x 7 segments common cathode (5611AS)
+- 4 x 7 segments common cathode (5611AS)
 - 1 x PIC16F54 Micro-Controller
-- 3 x 2N7002 Transistors
+- 1 x 74HC595 Shift Register
+- 4 x 2N7002 Transistors
 
 # Features
 
@@ -23,95 +24,70 @@ The "PIC16F54 7 segments display":
 The schematic[^schematic] and the gerber[^gerber] files
 
 [^gerber]: documents/gerber.zip
-[^schematic]: documents/images/pic16f54-7-segments-display-schematic.pdf
+[^schematic]: documents/images/ltd5250-schematic.pdf
 
 ![Schematic MCU\label{schematic_mcu}](documents/images/schematic_mcu.png){ width=60% }
 
-![Schematic Seven-Segments\label{schematic_seven_segment}](documents/images/schematic_seven_segment.png){ width=80% }
+![Schematic Seven-Segments\label{schematic_ltd5250}](documents/images/schematic_ltd5250.png){ width=80% }
 
-![Schematic Programmer and Header\label{schematic_seven_prog}](documents/images/schematic_seven_prog.png){ width=100% }
+![Schematic Programmer and Header\label{schematic_shift-reg}](documents/images/schematic_shift-reg.png){ width=100% }
 
-# One Wire Protocol
+# SPI Protocol
 
-## Bit Timing
+## Byte Timing
 
-![Master Write "0" Slot\label{bit_timing_0}](documents/images/bit_timing_0.png){ width=60% }
+![Master Write "0" Slot\label{byte_timing}](documents/images/byte_timing.png)
 
-![Master Write "1" Slot\label{bit_timing_1}](documents/images/bit_timing_1.png){ width=60% }
+Address
+: 1.Byte of the command, determines which register to be updated.
 
+Value
+: 2.Byte of the command, the value to be updated.
 
-<center>
 Table: Bit Timing
 
 | Symbol | Description | Min | Typ | Max | Unit |
-|:---:|:---|:---|:---:|---:|---:|
-| EN | Enable | 144 | 450 | 360 | us |
-| TR | Time to read | 380 | 500 | 720 | us |
-| TN | Time to new bit | 144| 1500 | 7500 | us |  
+|:--:|:---|:---|:---:|---:|---:|
+| Ta | Enable | 144 | 450 | 360 | us |
+| Tb | Time to read | 380 | 500 | 720 | us |
+| Tc | Time to new bit | 144| 1500 | 7500 | us |
+| Td | Time to new bit | 144| 1500 | 7500 | us |
 
-</center>
-
-EN
+Ta
 : Start of new bit
 
-TR
+Tb
 : Time between start of EN and the remote sample the DIO
 
-TN
+Tc
 : Time the remote spend wait for new Data, this should be bigger than the minimum allowed time for EN
 
-## Command Operation
-
-
-![Command Operation\label{command}](documents/images/command.png)
-
-address
-: 1.Byte of the command, determines which register to be updated.
-
-value
-: 2.Byte of the command, the value to be updated.
-
-CRC
-: The CRC, actually the crc8 with polynomial 0x1D of the 1. and 2. byte.
-
-x
-: Timeslot leave to calculate the crc8 of the actual byte.
-
-Table: Byte Timing
-
-| Symbol | Description | Min | Typ | Max | Unit |
-|:---:|:---|:---|:---:|---:|---:|
-| TB | Time to calcul the crc8 of the actual byte | 144 | 450 | 7500 | us |
+Td
+: Time the remote spend wait for new Data, this should be bigger than the minimum allowed time for EN
 
 ## Registers
-
-<center>
 
 Table: Driver Registers
 
 | Adresse | Description | Default |
 |:--------|:-----------:|--------:|
-| 0x00 | Option | 0x00 |
-| 0x01 | Digit 1 | 0x00 |
-| 0x02 | Digit 2 | 0x00 |
-| 0x03 | Digit 3 | 0x00 |
-
-</center>
+| 0x00    |   Option    | 0x00 |
+| 0x01    |   Digit 1   | 0x00 |
+| 0x02    |   Digit 2   | 0x00 |
+| 0x03    |   Digit 3   | 0x00 |
+| 0x04    |   Digit 4   | 0x00 |
 
 ### Option Register Bit Assignement
 
 This register acts as setting register.
 
-<center>
-
 Table: Option Register 
 
-| Option | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-|:---|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| | SLEEP | <t style="text-decoration:overline">EN</t> | DIM5  | DIM4  | DIM3  | DIM2  | DIM1  | DIM0  |
-| Default | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Option       | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+|:-------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| Description  | SLEEP | <t style="text-decoration:overline">EN</t> | DIM5  | DIM4  | DIM3  | DIM2  | DIM1  | DIM0  |
+| Default      | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-</center>
 
 DIM<5-0>
 : Dimmer, '0b000000' is full power and '0b111111' is dark.
@@ -128,7 +104,6 @@ SLEEP
 
 Registers describing the segments that should light on. Writing '1' to a position will light on this segments. 
 
-<center>
 
 Table: Digit Register Bit Assignement
 
@@ -136,13 +111,12 @@ Table: Digit Register Bit Assignement
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | DP    | G     | F  | E | D | C | B | A |
 
-</center>
 
-![Seven Segments\label{command}](documents/images/seven_segments.png){ width=30% }
+![Seven Segments\label{command}](documents/images/seven_segments.png)
 
 
 ---
-title: "One Wire Driver for the PIC16F54 7 segments display"
+title: "Firmware for LTD5250_4digit for a PIC16F54 Controller"
 author: Olivier Pimi
 date: \today
 geometry: "left=3cm,right=3cm,top=2cm,bottom=2cm"

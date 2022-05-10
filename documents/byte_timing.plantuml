@@ -1,0 +1,121 @@
+@startuml
+binary "/CS" as cs
+'binary "DIO" as dio
+binary "CLK" as clk
+concise "DIO" as p
+
+scale 20 as 50 pixels
+
+cs is 1
+clk is 0
+p is x
+
+@0
+cs is 1
+
+@+30
+@cs
+@+0 <-> @+10 : Ta
+
+p is Adresse : MSB
+cs is 0
+
+@+10
+@clk
+@+0 <-> @+20 : Tc
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+
+@clk
+@+0 <-> @+30 : Tb
+
+@+20
+p is Value : MSB
+cs is 0
+
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+@+10
+clk is 1
+@+10
+clk is 0
+
+@cs
+@+0 <-> @+20 : Tb
+
+@+20
+p is x
+cs is 1
+
+@enduml
