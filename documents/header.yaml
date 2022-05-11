@@ -1,0 +1,8 @@
+---
+title: "SPI LTD 5250 7 segments 4 digits display"
+author: Olivier Pimi
+date: \today
+geometry: "left=3cm,right=3cm,top=2cm,bottom=2cm"
+output: pdf_document
+caption-justification : centering
+---

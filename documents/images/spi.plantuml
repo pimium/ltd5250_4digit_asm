@@ -1,0 +1,250 @@
+@startuml
+'clock clk with period 5
+concise "Data" as db
+robust "CLK" as clk
+robust "DIO" as dio
+robust "CS" as cs
+
+db is x
+cs has Vcc,GND
+dio has Vcc,GND
+clk has Vcc,GND
+
+scale 100 as 300 pixels
+
+@0
+dio is GND
+cs is Vcc
+clk is GND
+
+
+@+10
+@cs
+@+0 <-> @+15 : TCS
+cs is GND
+dio is {GND,Vcc} #SlateGrey
+
+@+15
+cs -> clk :
+@clk
+@+0 <-> @+4 : T
+db is "Packet 0"
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@clk
+@+0 <-> @+12 : TPA
+@+2
+
+@+10
+db is "Packet 1"
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+
+@+10
+db is "Packet 2"
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+
+@+10
+db is "Packet 3"
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+
+@+10
+db is "Packet 4"
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+
+@+10
+db is "Packet 5"
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@+2
+clk is Vcc
+@+2
+clk is GND
+@cs
+@+0 <-> @+12 : TCE
+cs -> clk :
+@+2
+
+@+10
+cs is Vcc
+db is x
+dio is GND
+
+@enduml

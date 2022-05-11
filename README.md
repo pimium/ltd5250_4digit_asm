@@ -2,22 +2,21 @@
  
 # Overview
 
-The Driver control the display over One Wire bus. The driver can set up the luminosity and shut-down the display. When the driver shutdown the display, the display can only be startup again from power on or pushing the disable/enable-pin down. 
+A controller to drive a 4 digits 7 segments display over SPI bus. The controller can set up the luminosity and shut-down the display.  
 
 The "PIC16F54 7 segments display":
 
-- 4 x 7 segments common cathode (5611AS)
+- 2 x LTD5250 2 Digits
 - 1 x PIC16F54 Micro-Controller
 - 1 x 74HC595 Shift Register
 - 4 x 2N7002 Transistors
 
 # Features
 
-- One wire bus
-- Disable/Enable Pin
+- SPI bus
+- Disable/Enable
 - Dimming
-- Sleep (Energy saving, Then you need two pins) 
-- 3 characters
+- 4 characters
 
 # Schematic
 
@@ -26,11 +25,11 @@ The schematic[^schematic] and the gerber[^gerber] files
 [^gerber]: documents/gerber.zip
 [^schematic]: documents/images/ltd5250-schematic.pdf
 
-![Schematic MCU\label{schematic_mcu}](documents/images/schematic_mcu.png){ width=60% }
+![Schematic MCU\label{schematic_mcu}](documents/images/schematic_mcu.png)
 
-![Schematic Seven-Segments\label{schematic_ltd5250}](documents/images/schematic_ltd5250.png){ width=80% }
+![Schematic Seven-Segments\label{schematic_ltd5250}](documents/images/schematic_ltd5250.png)
 
-![Schematic Programmer and Header\label{schematic_shift-reg}](documents/images/schematic_shift-reg.png){ width=100% }
+![Schematic Programmer and Header\label{schematic_shift-reg}](documents/images/schematic_shift-reg.png)
 
 # SPI Protocol
 
