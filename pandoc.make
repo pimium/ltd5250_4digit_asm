@@ -18,7 +18,7 @@ PANDOCFLAGS =                        \
 all: phony documents/README.pdf
 
 documents/README.pdf: documents/remove_first_line.md $(FIGURES) pandoc.make | documents
-	pandoc $< -o $@ $(PANDOCFLAGS)
+	pandoc documents/pandoc_header.yaml $< -o $@ $(PANDOCFLAGS)
 
 documents/remove_first_line.md: README.md
 	tail -n +2 $< > $@

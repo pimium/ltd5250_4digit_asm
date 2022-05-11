@@ -113,13 +113,3 @@ Table: Digit Register Bit Assignement
 
 ![Seven Segments\label{command}](documents/images/seven_segments.png)
 
-
----
-title: "Firmware for LTD5250_4digit for a PIC16F54 Controller"
-author: Olivier Pimi
-date: \today
-geometry: "left=3cm,right=3cm,top=2cm,bottom=2cm"
-output: pdf_document
-caption-justification : centering
----
-
