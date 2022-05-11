@@ -9,4 +9,4 @@ program: $(EXECUTABLE)
 	pk2cmd -P$(MCU) -T -A5 -R -J -Z -M -F$(EXECUTABLE)
 
 clean:
-	rm -r *.hex *.lst *.o *.cod
+	rm -r *.hex *.lst *.cod ./documents/README.pdf documents/remove_first_line.md

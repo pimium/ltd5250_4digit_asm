@@ -30,7 +30,7 @@ documents:
 	mkdir ./documents
 
 clean: phony
-	rm -rf ./documents/README.pdf 
+	rm -rf ./documents/README.pdf documents/remove_first_line.md
 
 open: phony documents/README.pdf
 	evince documents/README.pdf
