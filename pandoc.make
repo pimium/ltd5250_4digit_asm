@@ -15,14 +15,13 @@ PANDOCFLAGS =                        \
 #   --table-of-contents                \
 #   --pdf-engine=xelatex               
 
-all: phony documents/README.pdf documents/README.tex
+all: phony documents/README.pdf
 
-documents/%.pdf: %.md $(FIGURES) documents/header.yaml pandoc.make | documents
-	pandoc documents/header.yaml $< -o $@ $(PANDOCFLAGS)
+documents/README.pdf: documents/remove_first_line.md $(FIGURES) pandoc.make | documents
+	pandoc $< -o $@ $(PANDOCFLAGS)
 
-
-documents/%.tex: %.md $(FIGURES) documents/header.yaml pandoc.make | documents
-	pandoc documents/header.yaml $< -o $@ $(PANDOCFLAGS)
+documents/remove_first_line.md: README.md
+	tail -n +2 $< > $@
 
 documents/%.epub: %.md $(FIGURES) pandoc.make | documents
 	pandoc $< -o $@ $(PANDOCFLAGS)
@@ -31,9 +30,9 @@ documents:
 	mkdir ./documents
 
 clean: phony
-	rm -rf ./documents
+	rm -rf ./documents/README.pdf documents/remove_first_line.md
 
-open: phony documents/readme.pdf
-	evince documents/readme.pdf
+open: phony documents/README.pdf
+	evince documents/README.pdf
 
-# pandoc -o documents.pdf readme.md  --template documents/my_eisvogel.latex --listings -V lang=en
+# pandoc -o documents.pdf README.md  --template documents/my_eisvogel.latex --listings -V lang=en

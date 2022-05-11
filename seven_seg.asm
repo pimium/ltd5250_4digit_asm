@@ -47,7 +47,7 @@ porta equ PORTA
 portb equ PORTB
 ;FSR   equ 0x04
  
-act_gigit   EQU  0x07        ;example variable definition
+act_digit   EQU  0x07        ;example variable definition
 counter     EQU  0x08        ;example variable definition
 state       EQU  0x09
 config_reg  EQU  0x0A
@@ -142,13 +142,13 @@ main
     goto turn_off_leds
     
     movlw 0x00
-    subwf act_gigit, f
+    subwf act_digit, f
     btfss STATUS, Z
     goto dimming
       
 display
     movlw 0x04
-    movwf act_gigit
+    movwf act_digit
     movlw digit3
     movwf FSR
 dimming    
@@ -362,7 +362,7 @@ SHIFT_IDLE_STATE
     movfw INDF
     movwf shift_reg
     decf FSR, f
-    decf act_gigit, f
+    decf act_digit, f
     
     movlw 0x08
     movwf shift_count
@@ -413,7 +413,7 @@ SHIFT_RCLK_STATE
     
     bsf portb, RCLK
        
-    movfw act_gigit
+    movfw act_digit
     
     call set_output_digit
     andwf portb

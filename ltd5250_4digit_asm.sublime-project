@@ -1,0 +1,37 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems":
+	[
+		{
+			"file_regex": "(.+[^:]):(\\d+):(\\d+): (?:fatal )?((?:error|warning): .+)$",
+			"name": "ltd5250_4digit asm",
+			"shell_cmd": "make -j4",
+			"variants":
+			[
+				{
+					"name": "clean",
+					"shell_cmd": "make -f gpasm.make clean",
+				},
+				{
+					"name": "build_hex",
+					"shell_cmd": "make -f gpasm.make",
+				},
+				{
+					"name": "program",
+					"shell_cmd": "make -f gpasm.make program",
+				},
+				{
+					"name": "pandoc",
+					"shell_cmd": "make -f pandoc.make",
+				},
+				
+			],
+			"working_dir": "$folder",
+		}
+	],
+}
