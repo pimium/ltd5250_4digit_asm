@@ -71,7 +71,7 @@ help_reg    EQU  0x18
 #define RCLK                0x02
 #define SRCLR               0x03
 
-#define CS                  0x00
+#define CE                  0x00
 #define CLK                 0x01
 #define DIO                 0x02
 
@@ -230,7 +230,7 @@ end_read
 
 READ_IDLE_STATE
 
-    btfss porta, CS
+    btfss porta, CE
     btfsc porta, CLK
     goto end_read
 
@@ -251,7 +251,7 @@ READ_RISING_STATE
     
     bcf porta, 3
  
-    btfsc porta, CS
+    btfsc porta, CE
     goto next_idle_state
 
     btfss porta, CLK
@@ -267,7 +267,7 @@ READ_RISING_STATE
 
 READ_FALLING_STATE
 
-    btfsc porta, CS
+    btfsc porta, CE
     goto next_idle_state
     
     btfsc porta, CLK
@@ -292,7 +292,7 @@ rising_falling_state
 
 READ_EXTRACT_STATE
 
-    btfsc porta, CS
+    btfsc porta, CE
     goto next_idle_state
 
     movlw 0x00
@@ -346,7 +346,7 @@ next_reinit_state
     
 READ_REINIT_STATE
 
-    btfss porta, CS
+    btfss porta, CE
     goto end_read
     
     movlw READ_IDLE

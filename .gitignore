@@ -2,3 +2,6 @@ nbproject/*
 dist/*
 build/*
 *.sublime-workspace
+*.cod
+*.hex
+*.lst
