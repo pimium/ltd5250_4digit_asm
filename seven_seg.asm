@@ -51,10 +51,10 @@ act_digit   EQU  0x07        ;example variable definition
 counter     EQU  0x08        ;example variable definition
 state       EQU  0x09
 config_reg  EQU  0x0A
-digit0      Equ  0x0B
-digit1      Equ  0x0C
-digit2      Equ  0x0D
-digit3      Equ  0x0E
+digit0      EQU  0x0B
+digit1      EQU  0x0C
+digit2      EQU  0x0D
+digit3      EQU  0x0E
 shift_state EQU  0x0F
 shift_reg   EQU  0x10
 shift_count EQU  0x11
@@ -66,27 +66,27 @@ fsr_read    EQU  0x16
 fsr_shift   EQU  0x17
 help_reg    EQU  0x18
 
-#define SER                 0x00
-#define SRCLK               0x01
-#define RCLK                0x02
-#define SRCLR               0x03
+#define SER                     0x00
+#define SRCLK                   0x01
+#define RCLK                    0x02
+#define SRCLR                   0x03
 
-#define CE                  0x00
-#define CLK                 0x01
-#define DIO                 0x02
+#define CE                      0x00
+#define CLK                     0x01
+#define DIO                     0x02
 
-#define WAIT_CONST          0x00
+#define WAIT_CONST              0x00
 
-#define SHIFT_IDLE          0x00
-#define SHIFT_FALLING       0x01
-#define SHIFT_RISING        0x02
-#define SHIFT_RCLK          0x03
+#define IDLE_SHIFT_REG          0x00
+#define SRCLK_FALLING_SHIFT_REG 0x01
+#define SRCLK_RISING_SHIFT_REG  0x02
+#define RLCK_ENABLE_SHIFT_REG   0x03
 
-#define READ_IDLE           0x00
-#define READ_FALLING        0x01
-#define READ_RISING         0x02
-#define READ_EXTRACT        0x03
-#define READ_REINIT         0x04
+#define READ_IDLE               0x00
+#define READ_FALLING            0x01
+#define READ_RISING             0x02
+#define READ_EXTRACT            0x03
+#define READ_REINIT             0x04
   
 ;**********************************************************************
     ORG     0x1FF             ; processor reset vector
@@ -116,12 +116,10 @@ init
     movlw 0x0E
     movwf fsr_read
     movwf fsr_shift
-    
-    movlw 0x0E
     movwf FSR
     clrf INDF
 
-    movlw 0x08
+    movlw 0x05
     movwf config_reg
     movlw 0x01
     movwf digit0
@@ -165,26 +163,23 @@ turn_off_leds
     goto end_display
     
 small_display
-        
-    movlw SHIFT_IDLE
-    subwf shift_state, w
-    btfsc STATUS, Z
-    goto SHIFT_IDLE_STATE
     
-    movlw SHIFT_FALLING
-    subwf shift_state, w
+    movf shift_state, w
+    xorlw IDLE_SHIFT_REG
     btfsc STATUS, Z
-    goto SHIFT_FALLING_STATE
+    goto IDLE_SHIFT_REG_STATE
     
-    movlw SHIFT_RISING
-    subwf shift_state, w
+    xorlw SRCLK_FALLING_SHIFT_REG^IDLE_SHIFT_REG
     btfsc STATUS, Z
-    goto SHIFT_RISING_STATE
+    goto SRCLK_FALLING_SHIFT_REG_STATE
     
-    movlw SHIFT_RCLK
-    subwf shift_state, w
+    xorlw SRCLK_RISING_SHIFT_REG^SRCLK_FALLING_SHIFT_REG
     btfsc STATUS, Z
-    goto SHIFT_RCLK_STATE
+    goto SHIFT_REG_RISING_STATE
+
+    xorlw RLCK_ENABLE_SHIFT_REG^SRCLK_RISING_SHIFT_REG
+    btfsc STATUS, Z
+    goto SHIFT_REG_RCLK_STATE
 end_display
     
     movfw FSR
@@ -193,28 +188,24 @@ end_display
     andwf fsr_read, w
     movwf FSR
 
-    movlw READ_IDLE
-    subwf read_state, w
+    movf read_state, w
+    xorlw READ_IDLE
     btfsc STATUS, Z
     goto READ_IDLE_STATE
-    
-    movlw READ_FALLING
-    subwf read_state, w
+
+    xorlw READ_FALLING^READ_IDLE
     btfsc STATUS, Z
     goto READ_FALLING_STATE
     
-    movlw READ_RISING
-    subwf read_state, w
+    xorlw READ_RISING^READ_FALLING
     btfsc STATUS, Z
     goto READ_RISING_STATE
     
-    movlw READ_EXTRACT  
-    subwf read_state, w
+    xorlw READ_EXTRACT^READ_RISING
     btfsc STATUS, Z
     goto READ_EXTRACT_STATE
-    
-    movlw READ_REINIT  
-    subwf read_state, w
+
+    xorlw READ_REINIT^READ_EXTRACT
     btfsc STATUS, Z
     goto READ_REINIT_STATE
 end_read
@@ -227,14 +218,13 @@ end_read
         
     goto main
 
-
 READ_IDLE_STATE
 
     btfss porta, CE
     btfsc porta, CLK
     goto end_read
 
-    bsf porta, 3
+    bsf porta, 3 ; debug
 ;    bcf porta, 3    
     
     clrf character
@@ -288,7 +278,6 @@ rising_falling_state
     movlw READ_RISING
     movwf read_state
     goto end_read
-
 
 READ_EXTRACT_STATE
 
@@ -353,8 +342,7 @@ READ_REINIT_STATE
     movwf read_state
     goto end_read
     
-    
-SHIFT_IDLE_STATE
+IDLE_SHIFT_REG_STATE
     bcf portb, SRCLR
     bsf portb, SRCLR 
     bcf portb, RCLK
@@ -367,11 +355,11 @@ SHIFT_IDLE_STATE
     movlw 0x08
     movwf shift_count
     
-    movlw SHIFT_FALLING
+    movlw SRCLK_FALLING_SHIFT_REG
     movwf shift_state
     goto end_display
 
-SHIFT_FALLING_STATE
+SRCLK_FALLING_SHIFT_REG_STATE
     
     bcf portb, SRCLK
     btfss shift_reg, 0x00
@@ -380,7 +368,7 @@ SHIFT_FALLING_STATE
 shift_falling_state_1_ret
     rrf shift_reg, f
     
-    movlw SHIFT_RISING
+    movlw SRCLK_RISING_SHIFT_REG
     movwf shift_state
     goto end_display
     
@@ -388,23 +376,23 @@ shift_falling_state_1
     bsf portb, SER
     goto shift_falling_state_1_ret
     
-SHIFT_RISING_STATE
+SHIFT_REG_RISING_STATE
 
     bsf portb, SRCLK
     
     decfsz shift_count, f
     goto shift_rising_state_0
     
-    movlw SHIFT_RCLK
-shift_rising_state_ret        
+    movlw RLCK_ENABLE_SHIFT_REG        
     movwf shift_state
     goto end_display
 
 shift_rising_state_0
-    movlw SHIFT_FALLING
-    goto shift_rising_state_ret
+    movlw SRCLK_FALLING_SHIFT_REG
+    movwf shift_state
+    goto end_display
 
-SHIFT_RCLK_STATE
+SHIFT_REG_RCLK_STATE
     
     bcf portb, SRCLK
    
@@ -418,7 +406,7 @@ SHIFT_RCLK_STATE
     call set_output_digit
     andwf portb
 
-    movlw SHIFT_IDLE
+    movlw IDLE_SHIFT_REG
     movwf shift_state
     goto end_display  
     
@@ -429,8 +417,7 @@ set_output_digit
     retlw 0xDF
     retlw 0xBF
     retlw 0x7F
-    
-    
+
 ; remaining code goes here
 
     END ; directive 'end of program'

@@ -70,11 +70,11 @@ Table: Driver Registers
 
 | Adresse | Description | Default |
 |:--------|:-----------:|--------:|
-| 0x00    |   Option    | 0x00 |
-| 0x01    |   Digit 1   | 0x00 |
-| 0x02    |   Digit 2   | 0x00 |
-| 0x03    |   Digit 3   | 0x00 |
-| 0x04    |   Digit 4   | 0x00 |
+| 0x00    |   Option    | 0x05 |
+| 0x01    |   Digit 1   | 0x01 |
+| 0x02    |   Digit 2   | 0x03 |
+| 0x03    |   Digit 3   | 0x07 |
+| 0x04    |   Digit 4   | 0x0F |
 
 ### Option Register Bit Assignement
 
@@ -84,12 +84,12 @@ Table: Option Register
 
 | Option       | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
 |:-------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| Description  | SLEEP | <t style="text-decoration:overline">EN</t> | DIM5  | DIM4  | DIM3  | DIM2  | DIM1  | DIM0  |
-| Default      | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Description  | SLEEP | <t style="text-decoration:overline">EN</t>   | DIM3  | DIM2  | DIM1  | DIM0  |
+| Default      | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 |
 
 
-DIM<5-0>
-: Dimmer, '0b000000' is full power and '0b111111' is dark.
+DIM<3-0>
+: Dimmer, '0b0000' is full power and '0b1111' is dark.
 
 <t style="text-decoration:overline">EN</t>
 : Writing '1' to this position will power off the segments. All segments are off, but the controller is still running.
