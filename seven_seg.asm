@@ -81,6 +81,7 @@ help_reg    EQU  0x18
 #define SRCLK_FALLING_SHIFT_REG 0x01
 #define SRCLK_RISING_SHIFT_REG  0x02
 #define RLCK_ENABLE_SHIFT_REG   0x03
+#define DIMMING_SHIFT_REG       0x04
 
 #define READ_IDLE               0x00
 #define READ_FALLING            0x01
@@ -119,7 +120,7 @@ init
     movwf FSR
     clrf INDF
 
-    movlw 0x05
+    movlw 0x0F
     movwf config_reg
     movlw 0x01
     movwf digit0
@@ -136,34 +137,7 @@ start
     call init
     
 main
-    btfsc config_reg, 4
-    goto turn_off_leds
-    
-    movlw 0x00
-    subwf act_digit, f
-    btfss STATUS, Z
-    goto dimming
-      
-display
-    movlw 0x04
-    movwf act_digit
-    movlw digit3
-    movwf FSR
-dimming    
-    incf counter, f
-    movlw 0x0F
-    andwf counter, f
-    andwf config_reg, w
-    subwf counter, w
-    btfsc STATUS, C
-    goto small_display
-turn_off_leds    
-    movlw 0xf0;
-    iorwf portb, f
-    goto end_display
-    
-small_display
-    
+
     movf shift_state, w
     xorlw IDLE_SHIFT_REG
     btfsc STATUS, Z
@@ -179,7 +153,11 @@ small_display
 
     xorlw RLCK_ENABLE_SHIFT_REG^SRCLK_RISING_SHIFT_REG
     btfsc STATUS, Z
-    goto SHIFT_REG_RCLK_STATE
+    goto RCLK_ENABLE_SHIFT_REG_STATE
+
+    xorlw DIMMING_SHIFT_REG^RLCK_ENABLE_SHIFT_REG
+    btfsc STATUS, Z
+    goto SHIFT_REG_DIMMING_STATE
 end_display
     
     movfw FSR
@@ -350,8 +328,7 @@ IDLE_SHIFT_REG_STATE
     movfw INDF
     movwf shift_reg
     decf FSR, f
-    decf act_digit, f
-    
+
     movlw 0x08
     movwf shift_count
     
@@ -392,7 +369,7 @@ shift_rising_state_0
     movwf shift_state
     goto end_display
 
-SHIFT_REG_RCLK_STATE
+RCLK_ENABLE_SHIFT_REG_STATE
     
     bcf portb, SRCLK
    
@@ -401,14 +378,54 @@ SHIFT_REG_RCLK_STATE
     
     bsf portb, RCLK
        
-    movfw act_digit
-    
+;    decf act_digit, w
+;    call set_output_digit
+;    andwf portb
+
+    movlw DIMMING_SHIFT_REG
+    movwf shift_state
+    goto end_display
+
+SHIFT_REG_DIMMING_STATE
+
+    btfsc config_reg, 5
+    goto turn_off_leds
+
+    decf act_digit, w
     call set_output_digit
     andwf portb
 
+    decfsz act_digit, f
+    goto display
+      
+    movlw 0x04
+    movwf act_digit
+    movlw digit3
+    movwf FSR
+display
+    movlw 0x1F
+    andwf config_reg, w
+    subwf counter, w
+    btfsc STATUS, C
+    goto jjjjjjj 
+    movlw 0xf0;
+    iorwf portb, f
+jjjjjjj    
+    decfsz counter, f
+    goto small_display
+
+    movlw 0x1F
+    movwf counter
+    
+turn_off_leds
+    movlw 0xf0;
+    iorwf portb, f
+    
+small_display
+
     movlw IDLE_SHIFT_REG
     movwf shift_state
-    goto end_display  
+    goto end_display
     
 set_output_digit
     andlw 0x03

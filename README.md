@@ -70,7 +70,7 @@ Table: Driver Registers
 
 | Adresse | Description | Default |
 |:--------|:-----------:|--------:|
-| 0x00    |   Option    | 0x05 |
+| 0x00    |   Option    | 0x0F |
 | 0x01    |   Digit 1   | 0x01 |
 | 0x02    |   Digit 2   | 0x03 |
 | 0x03    |   Digit 3   | 0x07 |
@@ -84,11 +84,11 @@ Table: Option Register
 
 | Option       | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
 |:-------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| Description  | SLEEP | <t style="text-decoration:overline">EN</t>   | DIM3  | DIM2  | DIM1  | DIM0  |
-| Default      | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 |
+| Description  | SLEEP | <t style="text-decoration:overline">EN</t>  |  DIM4  |  DIM3  | DIM2  | DIM1  | DIM0  |
+| Default      | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 1 |
 
 
-DIM<3-0>
+DIM<4-0>
 : Dimmer, '0b0000' is full power and '0b1111' is dark.
 
 <t style="text-decoration:overline">EN</t>
