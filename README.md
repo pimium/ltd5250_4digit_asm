@@ -82,11 +82,10 @@ This register acts as setting register.
 
 Table: Option Register 
 
-| Option       | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
-|:-------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| Description  | SLEEP | <t style="text-decoration:overline">EN</t>  |  DIM4  |  DIM3  | DIM2  | DIM1  | DIM0  |
-| Default      | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 1 |
-
+| Option       | 7 | 6 |  5 | 4 | 3 | 2 | 1 | 0 | 
+|:-------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Description  | SLEEP | EN | EN |  DIM4  |  DIM3  | DIM2  | DIM1  | DIM0 |
+| Default      | 0 | 0 |  0 | 0 | 1 | 1 | 1 | 1 |
 
 DIM<4-0>
 : Dimmer, '0b0000' is full power and '0b1111' is dark.
@@ -113,3 +112,8 @@ Table: Digit Register Bit Assignement
 
 ![Seven Segments\label{command}](documents/images/seven_segments.png)
 
+# Firmware 
+
+## Shift Register State-Machine
+
+![Shift Register State-Machine\label{shift_register_state}](documents/images/shift_register_state.png)
