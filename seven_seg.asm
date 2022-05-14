@@ -84,10 +84,11 @@ help_reg    EQU  0x18
 #define DIMMING_SHIFT_REG       0x04
 
 #define READ_IDLE               0x00
-#define READ_FALLING            0x01
-#define READ_RISING             0x02
-#define READ_EXTRACT            0x03
-#define READ_REINIT             0x04
+#define READ_SCK_FALLING        0x01
+#define READ_SCK_RISING         0x02
+#define READ_EXTRACT_1          0x03
+#define READ_EXTRACT_2          0x04
+#define READ_REINIT             0x05
   
 ;**********************************************************************
     ORG     0x1FF             ; processor reset vector
@@ -171,19 +172,23 @@ end_display
     btfsc STATUS, Z
     goto READ_IDLE_STATE
 
-    xorlw READ_FALLING^READ_IDLE
+    xorlw READ_SCK_FALLING^READ_IDLE
     btfsc STATUS, Z
-    goto READ_FALLING_STATE
+    goto READ_SCK_FALLING_STATE
     
-    xorlw READ_RISING^READ_FALLING
+    xorlw READ_SCK_RISING^READ_SCK_FALLING
     btfsc STATUS, Z
-    goto READ_RISING_STATE
+    goto READ_SCK_RISING_STATE
     
-    xorlw READ_EXTRACT^READ_RISING
+    xorlw READ_EXTRACT_1^READ_SCK_RISING
     btfsc STATUS, Z
-    goto READ_EXTRACT_STATE
+    goto READ_EXTRACT_1_STATE
 
-    xorlw READ_REINIT^READ_EXTRACT
+    xorlw READ_EXTRACT_2^READ_EXTRACT_1
+    btfsc STATUS, Z
+    goto READ_EXTRACT_2_STATE
+
+    xorlw READ_REINIT^READ_EXTRACT_2
     btfsc STATUS, Z
     goto READ_REINIT_STATE
 end_read
@@ -202,7 +207,7 @@ READ_IDLE_STATE
     btfsc porta, CLK
     goto end_read
 
-    bsf porta, 3 ; debug
+;    bsf porta, 3 ; debug
 ;    bcf porta, 3    
     
     clrf character
@@ -210,17 +215,17 @@ READ_IDLE_STATE
     movlw 0x08
     movwf bit_count
     
-    movlw READ_RISING
+    movlw READ_SCK_RISING
     movwf read_state
     goto end_read
 
 
-READ_RISING_STATE
+READ_SCK_RISING_STATE
     
-    bcf porta, 3
+;    bcf porta, 3
  
     btfsc porta, CE
-    goto next_idle_state
+    goto next_read_idle_state
 
     btfss porta, CLK
     goto end_read
@@ -228,15 +233,15 @@ READ_RISING_STATE
     btfsc porta, DIO
     incf character, f
     
-    movlw READ_FALLING
+    movlw READ_SCK_FALLING
     movwf read_state
     goto end_read
 
 
-READ_FALLING_STATE
+READ_SCK_FALLING_STATE
 
     btfsc porta, CE
-    goto next_idle_state
+    goto next_read_idle_state
     
     btfsc porta, CLK
     goto end_read
@@ -244,7 +249,12 @@ READ_FALLING_STATE
     decfsz bit_count, f
     goto rising_falling_state
     
-    movlw READ_EXTRACT
+    movlw 0x00
+    subwf char_count, w
+    btfss STATUS, Z
+    goto read_extract_2_state
+
+    movlw READ_EXTRACT_1
     movwf read_state
     goto end_read
     
@@ -253,64 +263,65 @@ rising_falling_state
     movlw 0xFE
     andwf character, f
     
-    movlw READ_RISING
+    movlw READ_SCK_RISING
     movwf read_state
     goto end_read
 
-READ_EXTRACT_STATE
+read_extract_2_state
+    movlw READ_EXTRACT_2
+    movwf read_state
+    goto end_read
+
+READ_EXTRACT_1_STATE
 
     btfsc porta, CE
-    goto next_idle_state
+    goto next_read_idle_state
 
-    movlw 0x00
-    subwf char_count, w
-    btfss STATUS, Z
-    goto weiter_extract
-    goto first_charachter_extract_state
-
-first_charachter_extract_state
     movlw 0x05
     subwf character, w
     btfsc STATUS, C
-    goto next_reinit_state
+    goto next_read_idle_state
     movlw 0x09
     addwf character, w
     movwf FSR
-    goto next_rising_state
-    
-weiter_extract
+   
+    clrf character
+    movlw 0x08
+    movwf bit_count
+    incf char_count, f
+    movlw READ_SCK_RISING
+    movwf read_state
+    goto end_read
+
+next_read_idle_state
+    movlw READ_IDLE
+    movwf read_state
+    goto end_read
+
+
+READ_EXTRACT_2_STATE
     movlw 0x1F
     andwf FSR, w
     movwf fsr_read
     movlw 0x0E
     subwf fsr_read, w
     btfsc STATUS, Z
-    goto next_reinit_state
+    goto next_read_reinit_state
     incf FSR  
     movfw character
     movwf INDF
 
-next_rising_state    
-    clrf character
-    movlw 0x08
-    movwf bit_count
-    incf char_count, f
-    movlw READ_RISING
-    movwf read_state
-    goto end_read
-
-next_idle_state
-    clrf char_count
     movlw READ_IDLE
     movwf read_state
     goto end_read
 
-next_reinit_state
-    clrf character
+next_read_reinit_state
+;    clrf character
     movlw READ_REINIT
     movwf read_state
     goto end_read
-    
+
+
 READ_REINIT_STATE
 
     btfss porta, CE
@@ -377,10 +388,6 @@ RCLK_ENABLE_SHIFT_REG_STATE
     iorwf portb, f
     
     bsf portb, RCLK
-       
-;    decf act_digit, w
-;    call set_output_digit
-;    andwf portb
 
     movlw DIMMING_SHIFT_REG
     movwf shift_state
@@ -407,10 +414,10 @@ display
     andwf config_reg, w
     subwf counter, w
     btfsc STATUS, C
-    goto jjjjjjj 
-    movlw 0xf0;
+    goto update_and_check_counter 
+    movlw 0xf0
     iorwf portb, f
-jjjjjjj    
+update_and_check_counter    
     decfsz counter, f
     goto small_display
 

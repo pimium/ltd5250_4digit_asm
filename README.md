@@ -14,7 +14,7 @@ The "PIC16F54 7 segments display":
 # Features
 
 - SPI bus
-- Disable/Enable
+- Disable/Enable 
 - Dimming
 - 4 characters
 
@@ -117,3 +117,7 @@ Table: Digit Register Bit Assignement
 ## Shift Register State-Machine
 
 ![Shift Register State-Machine\label{shift_register_state}](documents/images/shift_register_state.png)
+
+## Read Command State-Machine
+
+![Read Command State-Machine\label{read_command_state}](documents/images/read_command_state.png)

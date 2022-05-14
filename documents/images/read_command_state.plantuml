@@ -1,0 +1,43 @@
+@startuml
+'scale 700 width
+'scale 550 height
+
+Shift_Register -u-> Read_Command
+Read_Command -d-> Shift_Register
+
+state Read_Command {
+
+READ_IDLE    :
+READ_SCK_RISING :
+READ_SCK_FALLING  :
+READ_EXTRACT_1_STATE : extract byte 1\ncharacter = 0\nchar_count++
+READ_EXTRACT_2_STATE : extract byte 2
+READ_REINIT  :
+
+[*] --> READ_IDLE
+
+READ_IDLE -d-> READ_SCK_RISING : CS == 0 and SCK==0\n----\ncharacter = 0\nchar_count = 0\nbit_count = 8
+
+READ_SCK_RISING -d-> READ_SCK_FALLING : SCK == 1\n----\nbit_count--\nif(DIO == 1)\n\tcharacter++
+READ_SCK_RISING -u-> READ_IDLE : CS==1
+READ_SCK_RISING --> READ_SCK_RISING : SCK == 0
+
+READ_SCK_FALLING --> READ_EXTRACT_1_STATE : CLK == 0 and count == 0 \nand char_count == 0
+READ_SCK_FALLING --> READ_EXTRACT_2_STATE : CLK == 0 and count == 0 \nand char_count != 0
+READ_SCK_FALLING -u-> READ_SCK_RISING : CLK == 0 and count != 0\n----\ncharacter <<= 1
+READ_SCK_FALLING -l-> READ_IDLE : \nCS==1
+READ_SCK_FALLING --> READ_SCK_FALLING : CLK == 1
+
+READ_EXTRACT_1_STATE -u-> READ_SCK_RISING
+READ_EXTRACT_1_STATE -u-> READ_IDLE :CS==1
+
+READ_EXTRACT_2_STATE -l-> READ_REINIT
+READ_EXTRACT_2_STATE -u-> READ_IDLE :CS==1
+
+READ_REINIT -u-> READ_IDLE : CS==1
+'READ_REINIT -u-> READ_IDLE : \t
+}
+
+state Shift_Register {
+}
+@enduml
