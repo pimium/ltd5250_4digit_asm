@@ -10,7 +10,7 @@
 		{
 			"file_regex": "(.+[^:]):(\\d+):(\\d+): (?:fatal )?((?:error|warning): .+)$",
 			"name": "ltd5250_4digit asm",
-			"shell_cmd": "make -j4",
+			"shell_cmd": "make -f gpasm.make",
 			"variants":
 			[
 				{

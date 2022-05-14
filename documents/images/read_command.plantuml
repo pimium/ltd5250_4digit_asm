@@ -1,0 +1,37 @@
+@startuml
+scale 700 width
+'scale 550 height
+
+Shift_Register -u-> Read_Command
+Read_Command -d-> Shift_Register
+
+state Read_Command {
+
+READ_IDLE    :
+READ_FALLING :
+READ_RISING  :
+READ_EXTRACT :
+READ_REINIT  :
+
+[*] -r-> READ_IDLE
+
+READ_IDLE -r-> READ_FALLING
+
+READ_FALLING -d-> READ_RISING : \t
+READ_FALLING -l-> READ_IDLE
+
+READ_RISING -l-> READ_EXTRACT : count == 0
+READ_RISING -u-> READ_FALLING : count != 0
+READ_RISING -l-> READ_IDLE : \t
+
+
+READ_EXTRACT -l-> READ_REINIT
+READ_EXTRACT -l-> READ_IDLE
+
+READ_REINIT -u-> READ_IDLE : \t
+READ_REINIT -l-> READ_IDLE : \t
+}
+
+state Shift_Register {
+}
+@enduml
