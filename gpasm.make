@@ -10,5 +10,8 @@ $(EXECUTABLE): seven_seg.asm #seven_seg.inc
 program: $(EXECUTABLE)
 	pk2cmd -B$(PK2_DIR) -P$(MCU) -T -A5 -R -J -Z -M -F$(EXECUTABLE)
 
+run: 
+	pk2cmd -B$(PK2_DIR) -P$(MCU) -T -A5
+
 clean:
 	rm -r *.hex *.lst *.cod ./documents/README.pdf documents/remove_first_line.md

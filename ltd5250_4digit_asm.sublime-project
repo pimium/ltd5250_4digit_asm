@@ -26,6 +26,10 @@
 					"shell_cmd": "make -f gpasm.make program",
 				},
 				{
+					"name": "run",
+					"shell_cmd": "make -f gpasm.make run",
+				},
+				{
 					"name": "pandoc",
 					"shell_cmd": "make -f pandoc.make",
 				},
