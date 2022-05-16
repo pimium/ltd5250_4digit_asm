@@ -46,11 +46,11 @@ Value
 Table: Bit Timing
 
 | Symbol | Description | Min | Typ | Max | Unit |
-|:--:|:---|:---|:---:|---:|---:|
-| Ta | Enable | 144 | 450 | 360 | us |
-| Tb | Time to read | 380 | 500 | 720 | us |
-| Tc | Time to new bit | 144| 1500 | 7500 | us |
-| Td | Time to new bit | 144| 1500 | 7500 | us |
+|:--:|:---|:---:|:---:|:---:|---:|
+| Ta | Enable | 1200 | 2500 | -- | us |
+| Tb | Time to read | 1200 | 2500 | -- | us |
+| Tc | Time to new bit | 1200| 2500 | -- | us |
+| Td | Time to new bit | 200| 1500 | -- | us |
 
 Ta
 : Start of new bit
