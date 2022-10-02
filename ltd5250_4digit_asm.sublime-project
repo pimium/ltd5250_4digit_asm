@@ -22,6 +22,14 @@
 					"shell_cmd": "make -f gpasm.make",
 				},
 				{
+					"name": "debug",
+					"shell_cmd": "make -f gpasm.make debug",
+				},
+				{
+					"name": "usim",
+					"shell_cmd": "make -f gpasm.make sim",
+				},
+				{
 					"name": "program",
 					"shell_cmd": "make -f gpasm.make program",
 				},

@@ -29,11 +29,11 @@
 ;                                                                     *
 ;**********************************************************************
 
-    list      p=16F54             ; list directive to define processor
+list      p=16F54             ; list directive to define processor
 #include <p16f5x.inc>
 ; processor specific variable definitions
 
-    __CONFIG   _CP_OFF & _WDT_OFF & _RC_OSC
+__CONFIG   _CP_OFF & _WDT_OFF & _RC_OSC
 
 ; '__CONFIG' directive is used to embed configuration word within .asm file.
 ; The lables following the directive are located in the respective .inc file. 

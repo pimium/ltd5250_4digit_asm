@@ -5,3 +5,4 @@ build/*
 *.cod
 *.hex
 *.lst
+*.bin
